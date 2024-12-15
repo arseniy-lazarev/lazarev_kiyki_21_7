@@ -61,34 +61,57 @@ class _NewStudentState extends State<NewStudent> {
             children: [
               TextField(
                 controller: _firstNameController,
-                decoration: InputDecoration(labelText: 'First Name'),
+                decoration: const InputDecoration(labelText: 'First Name'),
               ),
               TextField(
                 controller: _lastNameController,
-                decoration: InputDecoration(labelText: 'Last Name'),
+                decoration: const InputDecoration(labelText: 'Last Name'),
               ),
+              const SizedBox(height: 16),
               DropdownButton<Department>(
                 value: _selectedDepartment,
+                isExpanded: true,
                 items: Department.values.map((dept) {
-                  return DropdownMenuItem(value: dept, child: Text(dept.toString().split('.').last));
+                  return DropdownMenuItem(
+                    value: dept,
+                    child: Row(
+                      children: [
+                        Icon(departmentIcons[dept], color: Colors.grey),
+                        const SizedBox(width: 8),
+                        Text(dept.toString().split('.').last),
+                      ],
+                    ),
+                  );
                 }).toList(),
                 onChanged: (dept) => setState(() => _selectedDepartment = dept!),
               ),
+              const SizedBox(height: 16),
               DropdownButton<Gender>(
                 value: _selectedGender,
+                isExpanded: true,
                 items: Gender.values.map((gender) {
-                  return DropdownMenuItem(value: gender, child: Text(gender.toString().split('.').last));
+                  return DropdownMenuItem(
+                    value: gender,
+                    child: Text(gender.toString().split('.').last),
+                  );
                 }).toList(),
                 onChanged: (gender) => setState(() => _selectedGender = gender!),
               ),
+              const SizedBox(height: 16),
               TextField(
-                decoration: InputDecoration(labelText: 'Grade'),
+                decoration: const InputDecoration(labelText: 'Grade'),
                 keyboardType: TextInputType.number,
-                onChanged: (value) => _grade = int.parse(value),
+                onChanged: (value) {
+                  final parsedGrade = int.tryParse(value);
+                  if (parsedGrade != null) {
+                    _grade = parsedGrade;
+                  }
+                },
               ),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _saveStudent,
-                child: Text('Save'),
+                child: const Text('Save'),
               ),
             ],
           ),
