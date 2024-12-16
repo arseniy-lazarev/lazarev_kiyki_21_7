@@ -5,7 +5,7 @@ import '../providers/students_provider.dart';
 import '../widgets/department_item.dart';
 
 class DepartmentsScreen extends ConsumerWidget {
-  const DepartmentsScreen({Key? key}) : super(key: key);
+  const DepartmentsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

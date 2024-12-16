@@ -7,7 +7,7 @@ import '../widgets/new_student.dart';
 import '../utils/snackbar_utils.dart';
 
 class StudentsScreen extends ConsumerWidget {
-  const StudentsScreen({Key? key}) : super(key: key);
+  const StudentsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -6,10 +6,10 @@ class StudentItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const StudentItem({
-    Key? key,
+    super.key,
     required this.student,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

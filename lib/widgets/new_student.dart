@@ -5,7 +5,7 @@ class NewStudent extends StatefulWidget {
   final Student? student;
   final Function(Student) onSave;
 
-  const NewStudent({Key? key, this.student, required this.onSave}) : super(key: key);
+  const NewStudent({super.key, this.student, required this.onSave});
 
   @override
   _NewStudentState createState() => _NewStudentState();
