@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/student.dart';
 import '../providers/students_provider.dart';
 import '../widgets/student_item.dart';
-import 'new_student.dart';
+import '../widgets/new_student.dart';
 import '../utils/snackbar_utils.dart';
 
 class StudentsScreen extends ConsumerWidget {

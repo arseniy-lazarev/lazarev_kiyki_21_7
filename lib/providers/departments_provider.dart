@@ -4,25 +4,25 @@ import '../models/department.dart';
 
 final departmentsProvider = Provider<List<DepartmentModel>>((ref) {
   return [
-    DepartmentModel(
+    const DepartmentModel(
       id: 'finance',
       name: 'Finance',
       color: Colors.green,
       icon: Icons.account_balance,
     ),
-    DepartmentModel(
+    const DepartmentModel(
       id: 'law',
       name: 'Law',
       color: Colors.blue,
       icon: Icons.gavel,
     ),
-    DepartmentModel(
+    const DepartmentModel(
       id: 'it',
       name: 'IT',
       color: Colors.orange,
       icon: Icons.computer,
     ),
-    DepartmentModel(
+    const DepartmentModel(
       id: 'medical',
       name: 'Medical',
       color: Colors.red,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/students.dart';
+import 'students_screen.dart';
 import 'departments_screen.dart';
 
 class TabsScreen extends StatefulWidget {
