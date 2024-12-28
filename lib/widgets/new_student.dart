@@ -1,32 +1,40 @@
 import 'package:flutter/material.dart';
 import '../models/student.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/students_provider.dart';
+import '../models/department.dart';
+import '../data/departments.dart';
+import '../providers/departments_provider.dart';
 
-class NewStudent extends StatefulWidget {
-  final Student? student;
-  final Function(Student) onSave;
+class NewStudent extends ConsumerStatefulWidget {
+  const NewStudent({
+    super.key,
+    this.studentIndex
+  });
 
-  const NewStudent({super.key, this.student, required this.onSave});
+  final int? studentIndex;
 
   @override
-  _NewStudentState createState() => _NewStudentState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _NewStudentState();
 }
 
-class _NewStudentState extends State<NewStudent> {
+class _NewStudentState extends ConsumerState<NewStudent> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  Department _selectedDepartment = Department.it;
+  DepartmentModel _selectedDepartment = DEPARTMENTS[0];
   Gender _selectedGender = Gender.male;
   int _grade = 1;
 
   @override
   void initState() {
     super.initState();
-    if (widget.student != null) {
-      _firstNameController.text = widget.student!.firstName;
-      _lastNameController.text = widget.student!.lastName;
-      _selectedDepartment = widget.student!.department;
-      _selectedGender = widget.student!.gender;
-      _grade = widget.student!.grade;
+    if (widget.studentIndex != null) {
+      final student = ref.read(studentsProvider).students[widget.studentIndex!];
+      _firstNameController.text = student.firstName;
+      _lastNameController.text = student.lastName;
+      _grade = student.grade;
+      _selectedGender = student.gender;
+      _selectedDepartment = student.department;
     }
   }
 
@@ -37,20 +45,41 @@ class _NewStudentState extends State<NewStudent> {
     super.dispose();
   }
 
-  void _saveStudent() {
-    final newStudent = Student(
-      firstName: _firstNameController.text,
-      lastName: _lastNameController.text,
-      department: _selectedDepartment,
-      grade: _grade,
-      gender: _selectedGender,
-    );
-    widget.onSave(newStudent);
-    Navigator.of(context).pop();
+  void _saveStudent() async {
+    if (_firstNameController.text.isEmpty || _lastNameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all fields')),
+      );
+      return;
+    }
+
+    if (widget.studentIndex != null) {
+      await ref.read(studentsProvider.notifier).editStudent(
+            widget.studentIndex!,
+            _firstNameController.text.trim(),
+            _lastNameController.text.trim(),
+            _selectedDepartment,
+            _selectedGender,
+            _grade,
+          );
+    } else {
+      await ref.read(studentsProvider.notifier).addStudent(
+            _firstNameController.text.trim(),
+            _lastNameController.text.trim(),
+            _selectedDepartment,
+            _selectedGender,
+            _grade,
+          );
+    }
+
+    if (!context.mounted) return;
+    Navigator.of(context).pop(); 
   }
 
   @override
   Widget build(BuildContext context) {
+    final departments = ref.watch(departmentsProvider);
+
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: SingleChildScrollView(
@@ -68,17 +97,17 @@ class _NewStudentState extends State<NewStudent> {
                 decoration: const InputDecoration(labelText: 'Last Name'),
               ),
               const SizedBox(height: 16),
-              DropdownButton<Department>(
+              DropdownButton<DepartmentModel>(
                 value: _selectedDepartment,
                 isExpanded: true,
-                items: Department.values.map((dept) {
+                items: departments.map((dept) {
                   return DropdownMenuItem(
                     value: dept,
                     child: Row(
                       children: [
-                        Icon(departmentIcons[dept], color: Colors.grey),
+                        Icon(dept.icon, color: dept.color),
                         const SizedBox(width: 8),
-                        Text(dept.toString().split('.').last),
+                        Text(dept.name.split('.').last),
                       ],
                     ),
                   );

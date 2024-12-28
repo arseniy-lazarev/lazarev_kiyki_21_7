@@ -11,8 +11,11 @@ class StudentItem extends StatelessWidget {
     required this.onTap,
   });
 
+  
+
   @override
   Widget build(BuildContext context) {
+    
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -23,7 +26,7 @@ class StudentItem extends StatelessWidget {
             style: const TextStyle(fontSize: 18, color: Colors.black),
           ),
           leading: Icon(
-            departmentIcons[student.department],
+            student.department.icon,
             color: Colors.grey,
           ),
         ),

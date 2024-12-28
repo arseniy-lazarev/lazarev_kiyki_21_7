@@ -15,5 +15,10 @@ void showUndoSnackbar(BuildContext context, WidgetRef ref) {
         },
       ),
     ),
-  );
+  ).closed.then((value) {
+    if (value != SnackBarClosedReason.action) {
+      ref.read(studentsProvider.notifier).remove();
+    }
+  });
+
 }

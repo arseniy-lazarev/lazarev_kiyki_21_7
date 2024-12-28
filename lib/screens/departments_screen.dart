@@ -12,6 +12,10 @@ class DepartmentsScreen extends ConsumerWidget {
     final departments = ref.watch(departmentsProvider);
     final students = ref.watch(studentsProvider);
 
+    if (students.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return GridView(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -21,7 +25,7 @@ class DepartmentsScreen extends ConsumerWidget {
         mainAxisSpacing: 16,
       ),
       children: departments.map((department) {
-        final studentCount = students
+        final studentCount = students.students
             .where((s) => s.department.name.toLowerCase() == department.id)
             .length;
         return DepartmentItem(
